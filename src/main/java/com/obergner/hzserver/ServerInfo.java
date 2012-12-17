@@ -34,8 +34,6 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.Phased;
-import org.springframework.jmx.export.annotation.ManagedAttribute;
-import org.springframework.jmx.export.annotation.ManagedResource;
 
 /**
  * <p>
@@ -45,7 +43,6 @@ import org.springframework.jmx.export.annotation.ManagedResource;
  * @author obergner <a href="olaf.bergner@gmx.de">Olaf Bergner</a>
  * 
  */
-@ManagedResource(objectName = "com.obergner.hzserver:name=ServerInfo", description = "Reports general information on this server process: name, version, buildnumber etc.")
 public final class ServerInfo implements Phased, ServerInfoMBean {
 
 	private static final String	SPECIFICATION_TITLE	  = "Specification-Title";
@@ -81,8 +78,10 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	        NullPointerException {
 		this.serverManifest = loadServerManifest();
 		this.runtimeMBean = ManagementFactory.getRuntimeMXBean();
-		ManagementFactory.getPlatformMBeanServer().registerMBean(this,
-		        new ObjectName("vnet.hz-server:name=ServerInfo"));
+		ManagementFactory.getPlatformMBeanServer().registerMBean(
+		        this,
+		        new ObjectName(getClass().getPackage().getName()
+		                + ":name=ServerInfo"));
 	}
 
 	private Manifest loadServerManifest() throws MalformedURLException,
@@ -132,7 +131,6 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	 * @see com.obergner.hzserver.ServerInfoMBean#getSpecificationTitle()
 	 */
 	@Override
-	@ManagedAttribute(description = "This server process' name")
 	public String getSpecificationTitle() {
 		return getAttribute(SPECIFICATION_TITLE);
 	}
@@ -141,7 +139,6 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	 * @see com.obergner.hzserver.ServerInfoMBean#getSpecificationVersion()
 	 */
 	@Override
-	@ManagedAttribute(description = "This server process' version")
 	public String getSpecificationVersion() {
 		return getAttribute(SPECIFICATION_VERSION);
 	}
@@ -150,7 +147,6 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	 * @see com.obergner.hzserver.ServerInfoMBean#getBuildNumber()
 	 */
 	@Override
-	@ManagedAttribute(description = "This server process' buildnumber")
 	public String getBuildNumber() {
 		return getAttribute(BUILD_NUMBER);
 	}
@@ -159,7 +155,6 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	 * @see com.obergner.hzserver.ServerInfoMBean#getBuildJdk()
 	 */
 	@Override
-	@ManagedAttribute(description = "Which JDK built this server process")
 	public String getBuildJdk() {
 		return getAttribute(BUILD_JDK);
 	}
@@ -168,7 +163,6 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	 * @see com.obergner.hzserver.ServerInfoMBean#getBuiltBy()
 	 */
 	@Override
-	@ManagedAttribute(description = "Who built this server process")
 	public String getBuiltBy() {
 		return getAttribute(BUILT_BY);
 	}

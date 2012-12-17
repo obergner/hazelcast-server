@@ -42,8 +42,10 @@ import com.yammer.metrics.core.MetricsRegistry;
  */
 public class HazelcastService implements SmartLifecycle {
 
-	private final Logger	                log	= LoggerFactory
-	                                                    .getLogger(getClass());
+	private static final String	            STARTUP_DURATION_GAUGE	= "startup-duration-millis";
+
+	private final Logger	                log	                   = LoggerFactory
+	                                                                       .getLogger(getClass());
 
 	private final Config	                configuration;
 
@@ -76,7 +78,7 @@ public class HazelcastService implements SmartLifecycle {
 		this.hazelcastInstance = FactoryImpl
 		        .newHazelcastInstanceProxy(this.configuration);
 		final long startupDuration = System.currentTimeMillis() - start;
-		this.metricsRegistry.newGauge(getClass(), "startup-duration-millis",
+		this.metricsRegistry.newGauge(getClass(), STARTUP_DURATION_GAUGE,
 		        new Gauge<Long>() {
 
 			        @Override
@@ -99,6 +101,7 @@ public class HazelcastService implements SmartLifecycle {
 		this.log.info("Shutting down Hazelcast instance {} ...",
 		        this.hazelcastInstance);
 
+		this.metricsRegistry.removeMetric(getClass(), STARTUP_DURATION_GAUGE);
 		this.hazelcastInstance.shutdown();
 
 		this.log.info("Hazelcast instance {} shut down", this.hazelcastInstance);
