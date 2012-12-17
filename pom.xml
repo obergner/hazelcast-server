@@ -516,6 +516,7 @@
 
             <properties>
                 <rpm.filtered.dir>${project.build.directory}/rpm-filtered</rpm.filtered.dir>
+                <rpm.version>1.0.0</rpm.version>
                 <rpm.dist>el6</rpm.dist>
                 <rpm.arch>x86_64</rpm.arch>
                 <rpm.user>hazelcast</rpm.user>
