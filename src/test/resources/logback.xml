@@ -19,29 +19,12 @@
     governing permissions and limitations under the License.
 
 -->
-<configuration
-    scan="true"
-    scanPeriod="30 seconds">
-
-    <jmxConfigurator />
+<configuration>
 
     <appender
         name="STDOUT"
         class="ch.qos.logback.core.ConsoleAppender">
 		<!-- encoders are assigned by default the type ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
-        <withJansi>true</withJansi>
-        <encoder>
-            <pattern><![CDATA[%d [%-15.15thread] [Hazelcast Server] %highlight(%-5level) %cyan(%-30.30logger{1}) - %m%n]]></pattern>
-        </encoder>
-    </appender>
-
-    <appender
-        name="FILE"
-        class="ch.qos.logback.core.FileAppender">
-        <file>${rpm.var-log.dir}/hazelcast-server.log</file>
-        <append>true</append>
-        <!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
-            by default -->
         <encoder>
             <pattern><![CDATA[%d [%-15.15thread] [Hazelcast Server] %-5level %-30.30logger{1} - %m%n]]></pattern>
         </encoder>
@@ -61,8 +44,6 @@
         level="DEBUG">
         <appender-ref
             ref="STDOUT" />
-        <appender-ref
-            ref="FILE" />
     </root>
 
 </configuration>

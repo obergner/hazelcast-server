@@ -219,7 +219,8 @@
             <groupId>org.vafer</groupId>
             <artifactId>jmx2snmp</artifactId>
             <version>${dep.jmx2snmp.version}</version>
-            <scope>compile</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/jmx2snmp-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
 		<!-- *************************************************************** -->
 		<!-- Runtime -->
@@ -303,10 +304,8 @@
                     </includes>
                     <excludes>
                         <exclude>target/**</exclude>
-                        <exclude>LICENSE.txt</exclude>
-                        <exclude>NOTICE.txt</exclude>
-                        <exclude>slf4j-license.txt</exclude>
                         <exclude>README.md</exclude>
+                        <exclude>**/*.properties</exclude>
                     </excludes>
                     <useDefaultExcludes>true</useDefaultExcludes>
                     <useDefaultMapping>true</useDefaultMapping>
@@ -722,6 +721,11 @@
                                             <username>${rpm.user}</username>
                                             <groupname>${rpm.group}</groupname>
                                             <dependency />
+                                            <sources>
+                                                <source>
+                                                    <location>lib/</location>
+                                                </source>
+                                            </sources>
                                         </mapping>
                                     </mappings>
                                     <preinstallScriptlet>
