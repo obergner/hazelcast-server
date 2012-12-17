@@ -518,8 +518,7 @@
                 <rpm.filtered.dir>${project.build.directory}/rpm-filtered</rpm.filtered.dir>
                 <rpm.dist>el6</rpm.dist>
                 <rpm.arch>x86_64</rpm.arch>
-                <rpm.version>0.19.8</rpm.version>
-                <rpm.repository>vnet</rpm.repository>
+                <rpm.version>${project.version}</rpm.version>
                 <rpm.user>hazelcast</rpm.user>
                 <rpm.group>hazelcast</rpm.group>
                 <rpm.var-run.dir>/var/run/hazelcast-server</rpm.var-run.dir>
