@@ -29,7 +29,6 @@ import java.net.URL;
 import org.junit.Test;
 
 import com.hazelcast.config.Config;
-import com.obergner.hzserver.pluggable.ComposableXmlConfigBuilder;
 
 public class ComposableXmlConfigBuilderTest {
 

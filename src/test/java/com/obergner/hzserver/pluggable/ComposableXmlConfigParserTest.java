@@ -38,8 +38,6 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
-import com.obergner.hzserver.pluggable.ComposableXmlConfigParser;
-
 public class ComposableXmlConfigParserTest {
 
 	private static final String	CONFIG_FILE	= "global/composable-xml-config-test-config.xml";

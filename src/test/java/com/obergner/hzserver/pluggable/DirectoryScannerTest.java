@@ -25,8 +25,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
-import com.obergner.hzserver.pluggable.DirectoryScanner;
-
 public class DirectoryScannerTest {
 
 	@Test

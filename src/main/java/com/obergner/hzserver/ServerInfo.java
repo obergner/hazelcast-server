@@ -18,11 +18,16 @@
  */
 package com.obergner.hzserver;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.RuntimeMXBean;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
+import java.util.Map;
 import java.util.jar.Manifest;
 
 import javax.management.InstanceAlreadyExistsException;
@@ -45,22 +50,24 @@ import org.springframework.context.Phased;
  */
 public final class ServerInfo implements Phased, ServerInfoMBean {
 
-	private static final String	SPECIFICATION_TITLE	  = "Specification-Title";
+	private static final String	SPECIFICATION_TITLE	       = "Specification-Title";
 
-	private static final String	SPECIFICATION_VERSION	= "Specification-Version";
+	private static final String	SPECIFICATION_VERSION	   = "Specification-Version";
 
-	private static final String	BUILD_NUMBER	      = "BuildNumber";
+	private static final String	IMPLEMENTATION_BRANCH	   = "Implementation-Branch";
 
-	private static final String	BUILD_JDK	          = "Build-Jdk";
+	private static final String	IMPLEMENTATION_REVISION	   = "Implementation-Revision";
 
-	private static final String	BUILT_BY	          = "Built-By";
+	private static final String	IMPLEMENTATION_BUILDNUMBER	= "Implementation-BuildNumber";
 
-	private final Logger	    log	                  = LoggerFactory
-	                                                          .getLogger("HazelcastServer");
+	private static final String	BUILD_JDK	               = "Build-Jdk";
+
+	private static final String	BUILT_BY	               = "Built-By";
+
+	private final Logger	    log	                       = LoggerFactory
+	                                                               .getLogger("HazelcastServer");
 
 	private final Manifest	    serverManifest;
-
-	private final RuntimeMXBean	runtimeMBean;
 
 	/**
 	 * @throws IOException
@@ -77,7 +84,6 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	        NotCompliantMBeanException, MalformedObjectNameException,
 	        NullPointerException {
 		this.serverManifest = loadServerManifest();
-		this.runtimeMBean = ManagementFactory.getRuntimeMXBean();
 		ManagementFactory.getPlatformMBeanServer().registerMBean(
 		        this,
 		        new ObjectName(getClass().getPackage().getName()
@@ -106,21 +112,93 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	}
 
 	public void logBanner() {
-		this.log.info("#######################################################################");
-		this.log.info("Name:            {}", getAttribute(SPECIFICATION_TITLE));
-		this.log.info("Version:         {}",
-		        getAttribute(SPECIFICATION_VERSION));
-		this.log.info("Buildnumber:     {}", getAttribute(BUILD_NUMBER));
-		this.log.info("Build-JDK:       {}", getAttribute(BUILD_JDK));
-		this.log.info("Built-By:        {}", getAttribute(BUILT_BY));
-		this.log.info("-----------------------------------------------------------------------");
-		this.log.info("Runtime:         {}", this.runtimeMBean.getName());
-		this.log.info("JVM:             {}", this.runtimeMBean.getVmName());
-		this.log.info("JVM Version:     {}", this.runtimeMBean.getVmVersion());
-		this.log.info("JVM Vendor:      {}", this.runtimeMBean.getVmVendor());
-		this.log.info("JVM Arguments:   {}",
-		        this.runtimeMBean.getInputArguments());
-		this.log.info("#######################################################################");
+		this.log.info("================================================================================================");
+		this.log.info(formatLogLine("Name", getName()));
+		this.log.info(formatLogLine("Version", getVersion()));
+		this.log.info(formatLogLine("Buildnumber", getBuildNumber()));
+		this.log.info(formatLogLine("Branch", getBranch()));
+		this.log.info(formatLogLine("Revision", getRevision()));
+		this.log.info(formatLogLine("Build-JDK", getBuildJdk()));
+		this.log.info(formatLogLine("Built-By", getBuiltBy()));
+		this.log.info("------------------------------------------------------------------------------------------------");
+		this.log.info(formatLogLine("JVM", getJVM()));
+		this.log.info("------------------------------------------------------------------------------------------------");
+		logBootClassPath();
+		this.log.info("------------------------------------------------------------------------------------------------");
+		logClassPath();
+		this.log.info("------------------------------------------------------------------------------------------------");
+		this.log.info(formatLogLine("LibraryPath", getLibraryPath()));
+		this.log.info("------------------------------------------------------------------------------------------------");
+		logSystemProperties();
+		this.log.info("------------------------------------------------------------------------------------------------");
+		this.log.info(formatLogLine("Operating System", getOS()));
+		this.log.info(formatLogLine("Available Processors",
+		        getNumAvailableProcessors()));
+		this.log.info("------------------------------------------------------------------------------------------------");
+		this.log.info(formatLogLine("Heap Memory Usage (Initial/MB)",
+		        getInitialHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Heap Memory Usage (Used/MB)",
+		        getUsedHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Heap Memory Usage (Committed/MB)",
+		        getCommittedHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Heap Memory Usage (Max/MB)",
+		        getMaxHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Non Heap Memory Usage (Initial/MB)",
+		        getInitialNonHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Non Heap Memory Usage (Used/MB)",
+		        getUsedNonHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Non Heap Memory Usage (Committed/MB)",
+		        getCommittedNonHeapMemoryInMBs()));
+		this.log.info(formatLogLine("Non Heap Memory Usage (Max/MB)",
+		        getMaxNonHeapMemoryInMBs()));
+		this.log.info("================================================================================================");
+	}
+
+	private String formatLogLine(final String header, final String arg) {
+		return String.format("%-43s: %s", header, arg);
+	}
+
+	private String formatLogLine(final String header, final long arg) {
+		return String.format("%-43s: %d", header, arg);
+	}
+
+	private void logBootClassPath() {
+		logStringEntries("BootClassPath", getBootClassPath(),
+		        File.pathSeparator);
+	}
+
+	private void logStringEntries(final String header,
+	        final String entriesString, final String sep) {
+		final String[] bootClassPathEntries = entriesString.split(sep);
+		int idx = 1;
+		for (final String bootClassPathEntry : bootClassPathEntries) {
+			this.log.info(formatLogLine(header + " (" + idx++ + ")",
+			        bootClassPathEntry));
+		}
+	}
+
+	private void logClassPath() {
+		logStringEntries("BootClassPath", getClassPath(), File.pathSeparator);
+	}
+
+	private void logSystemProperties() {
+		logStringEntries("SystemProperties", getSystemProperties(), " -D");
+	}
+
+	// ------------------------------------------------------------------------
+
+	@Override
+	public String getName() {
+		return getTitle() + " v. " + getVersion() + " (" + getBuildNumber()
+		        + ")";
+	}
+
+	/**
+	 * @see com.obergner.hzserver.ServerInfoMBean#getTitle()
+	 */
+	@Override
+	public String getTitle() {
+		return getAttribute(SPECIFICATION_TITLE);
 	}
 
 	private String getAttribute(final String name) {
@@ -128,19 +206,21 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	}
 
 	/**
-	 * @see com.obergner.hzserver.ServerInfoMBean#getSpecificationTitle()
+	 * @see com.obergner.hzserver.ServerInfoMBean#getVersion()
 	 */
 	@Override
-	public String getSpecificationTitle() {
-		return getAttribute(SPECIFICATION_TITLE);
+	public String getVersion() {
+		return getAttribute(SPECIFICATION_VERSION);
 	}
 
-	/**
-	 * @see com.obergner.hzserver.ServerInfoMBean#getSpecificationVersion()
-	 */
 	@Override
-	public String getSpecificationVersion() {
-		return getAttribute(SPECIFICATION_VERSION);
+	public String getBranch() {
+		return getAttribute(IMPLEMENTATION_BRANCH);
+	}
+
+	@Override
+	public String getRevision() {
+		return getAttribute(IMPLEMENTATION_REVISION);
 	}
 
 	/**
@@ -148,7 +228,7 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	 */
 	@Override
 	public String getBuildNumber() {
-		return getAttribute(BUILD_NUMBER);
+		return getAttribute(IMPLEMENTATION_BUILDNUMBER);
 	}
 
 	/**
@@ -167,15 +247,152 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 		return getAttribute(BUILT_BY);
 	}
 
+	// ------------------------------------------------------------------------
+
+	@Override
+	public String getJVM() {
+		return runtime().getVmName() + " " + runtime().getVmVersion() + " ("
+		        + runtime().getVmVendor() + ")";
+	}
+
+	private RuntimeMXBean runtime() {
+		return ManagementFactory.getRuntimeMXBean();
+	}
+
+	@Override
+	public String getClassPath() {
+		return runtime().getClassPath();
+	}
+
+	@Override
+	public String getBootClassPath() {
+		return runtime().getBootClassPath();
+	}
+
+	@Override
+	public String getLibraryPath() {
+		return runtime().getLibraryPath();
+	}
+
+	@Override
+	public String getSystemProperties() {
+		final Map<String, String> sysProps = runtime().getSystemProperties();
+		final StringBuilder result = new StringBuilder();
+		for (final Map.Entry<String, String> sysProp : sysProps.entrySet()) {
+			result.append("-D").append(sysProp.getKey()).append("=")
+			        .append(sysProp.getValue()).append(' ');
+		}
+		return result.toString();
+	}
+
+	@Override
+	public Date getStartTime() {
+		return new Date(runtime().getStartTime());
+	}
+
+	@Override
+	public long getUptimeMillis() {
+		return runtime().getUptime();
+	}
+
+	// ------------------------------------------------------------------------
+
+	@Override
+	public String getOS() {
+		return os().getName() + " " + os().getVersion() + " (" + os().getArch()
+		        + ")";
+	}
+
+	private OperatingSystemMXBean os() {
+		return ManagementFactory.getOperatingSystemMXBean();
+	}
+
+	@Override
+	public int getNumAvailableProcessors() {
+		return os().getAvailableProcessors();
+	}
+
+	// ------------------------------------------------------------------------
+
+	@Override
+	public int getInitialHeapMemoryInMBs() {
+		return bytesToMBs(memory().getHeapMemoryUsage().getInit());
+	}
+
+	private MemoryMXBean memory() {
+		return ManagementFactory.getMemoryMXBean();
+	}
+
+	private int bytesToMBs(final long bytes) {
+		return (int) (bytes / (1024 * 1024));
+	}
+
+	@Override
+	public int getUsedHeapMemoryInMBs() {
+		return bytesToMBs(memory().getHeapMemoryUsage().getUsed());
+	}
+
+	@Override
+	public int getCommittedHeapMemoryInMBs() {
+		return bytesToMBs(memory().getHeapMemoryUsage().getCommitted());
+	}
+
+	@Override
+	public int getMaxHeapMemoryInMBs() {
+		return bytesToMBs(memory().getHeapMemoryUsage().getMax());
+	}
+
+	@Override
+	public int getInitialNonHeapMemoryInMBs() {
+		return bytesToMBs(memory().getNonHeapMemoryUsage().getInit());
+	}
+
+	@Override
+	public int getUsedNonHeapMemoryInMBs() {
+		return bytesToMBs(memory().getNonHeapMemoryUsage().getUsed());
+	}
+
+	@Override
+	public int getCommittedNonHeapMemoryInMBs() {
+		return bytesToMBs(memory().getNonHeapMemoryUsage().getCommitted());
+	}
+
+	@Override
+	public int getMaxNonHeapMemoryInMBs() {
+		return bytesToMBs(memory().getNonHeapMemoryUsage().getMax());
+	}
+
 	/**
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
-		return "ServerInfo@" + this.hashCode() + "[SpecificationTitle: "
-		        + this.getSpecificationTitle() + "|SpecificationVersion: "
-		        + this.getSpecificationVersion() + "|BuildNumber: "
-		        + this.getBuildNumber() + "|BuildJdk: " + this.getBuildJdk()
-		        + "|BuiltBy: " + this.getBuiltBy() + "]";
+		return "ServerInfo@" + this.hashCode() + "[Name: " + this.getName()
+		        + "|SpecificationTitle: " + this.getTitle()
+		        + "|SpecificationVersion: " + this.getVersion()
+		        + "|BuildNumber: " + this.getBuildNumber() + "|BuildJdk: "
+		        + this.getBuildJdk() + "|BuiltBy: " + this.getBuiltBy()
+		        + "|JVM: " + this.getJVM() + "|ClassPath: "
+		        + this.getClassPath() + "|BootClassPath: "
+		        + this.getBootClassPath() + "|LibraryPath: "
+		        + this.getLibraryPath() + "|SystemProperties: "
+		        + this.getSystemProperties() + "|StartTime: "
+		        + this.getStartTime() + "|UptimeMillis: "
+		        + this.getUptimeMillis() + "|OS: " + this.getOS()
+		        + "|NumAvailableProcessors: "
+		        + this.getNumAvailableProcessors()
+		        + "|InitialHeapMemoryInMBs: "
+		        + this.getInitialHeapMemoryInMBs() + "|UsedHeapMemoryInMBs: "
+		        + this.getUsedHeapMemoryInMBs() + "|CommittedHeapMemoryInMBs: "
+		        + this.getCommittedHeapMemoryInMBs() + "|MaxHeapMemoryInMBs: "
+		        + this.getMaxHeapMemoryInMBs() + "|InitialNonHeapMemoryInMBs: "
+		        + this.getInitialNonHeapMemoryInMBs()
+		        + "|UsedNonHeapMemoryInMBs: "
+		        + this.getUsedNonHeapMemoryInMBs()
+		        + "|CommittedNonHeapMemoryInMBs: "
+		        + this.getCommittedNonHeapMemoryInMBs()
+		        + "|MaxNonHeapMemoryInMBs: " + this.getMaxNonHeapMemoryInMBs()
+		        + "]";
 	}
+
 }

@@ -18,23 +18,65 @@
  */
 package com.obergner.hzserver;
 
-import org.springframework.jmx.export.annotation.ManagedAttribute;
+import java.util.Date;
 
 public interface ServerInfoMBean {
 
-	@ManagedAttribute(description = "This server process' name")
-	String getSpecificationTitle();
+	// ------------------------------------------------------------------------
 
-	@ManagedAttribute(description = "This server process' version")
-	String getSpecificationVersion();
+	String getName();
 
-	@ManagedAttribute(description = "This server process' buildnumber")
+	String getTitle();
+
+	String getVersion();
+
+	String getBranch();
+
+	String getRevision();
+
 	String getBuildNumber();
 
-	@ManagedAttribute(description = "Which JDK built this server process")
 	String getBuildJdk();
 
-	@ManagedAttribute(description = "Who built this server process")
 	String getBuiltBy();
 
+	// ------------------------------------------------------------------------
+
+	String getJVM();
+
+	String getClassPath();
+
+	String getBootClassPath();
+
+	String getLibraryPath();
+
+	String getSystemProperties();
+
+	Date getStartTime();
+
+	long getUptimeMillis();
+
+	// ------------------------------------------------------------------------
+
+	String getOS();
+
+	int getNumAvailableProcessors();
+
+	// ------------------------------------------------------------------------
+
+	int getInitialHeapMemoryInMBs();
+
+	int getUsedHeapMemoryInMBs();
+
+	int getCommittedHeapMemoryInMBs();
+
+	int getMaxHeapMemoryInMBs();
+
+	int getInitialNonHeapMemoryInMBs();
+
+	int getUsedNonHeapMemoryInMBs();
+
+	int getCommittedNonHeapMemoryInMBs();
+
+	int getMaxNonHeapMemoryInMBs();
 }

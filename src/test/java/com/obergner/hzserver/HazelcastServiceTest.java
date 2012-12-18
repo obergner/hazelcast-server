@@ -31,7 +31,6 @@ import org.junit.Test;
 
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
-import com.obergner.hzserver.HazelcastService;
 import com.yammer.metrics.Metrics;
 
 public class HazelcastServiceTest {

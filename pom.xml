@@ -378,21 +378,28 @@
                 <version>${plugins.buildnumber.version}</version>
                 <executions>
                     <execution>
+                        <id>create-build-timestamp</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create-timestamp</goal>
+                        </goals>
+                        <configuration>
+                            <timestampFormat>yyyyMMddHHmmss</timestampFormat>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>create-build-revision</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>create</goal>
                         </goals>
+                        <configuration>
+                            <doCheck>false</doCheck>
+                            <doUpdate>false</doUpdate>
+                            <revisionOnScmFailure>-1</revisionOnScmFailure>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <doCheck>false</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <revisionOnScmFailure>-1</revisionOnScmFailure>
-                    <format>{0,time,yyyyMMddHHmmss}</format>
-                    <items>
-                        <item>timestamp</item>
-                    </items>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -439,7 +446,9 @@
                             <Implementation-MinorVersion>${parsedVersion.minorVersion}</Implementation-MinorVersion>
                             <Implementation-IncrementalVersion>${parsedVersion.incrementalVersion}</Implementation-IncrementalVersion>
                             <Implementation-Qualifier>${parsedVersion.qualifier}</Implementation-Qualifier>
-                            <Implementation-BuildNumber>${buildNumber}</Implementation-BuildNumber>
+                            <Implementation-BuildNumber>${timestamp}</Implementation-BuildNumber>
+                            <Implementation-Branch>${scmBranch}</Implementation-Branch>
+                            <Implementation-Revision>${buildNumber}</Implementation-Revision>
                         </manifestEntries>
                     </archive>
                 </configuration>

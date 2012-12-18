@@ -25,7 +25,6 @@ import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 
 import com.hazelcast.config.Config;
-import com.obergner.hzserver.pluggable.ComposableXmlConfigFactoryBean;
 
 public class ComposableXmlConfigFactoryBeanTest {
 
