@@ -533,6 +533,9 @@
                 <rpm.var-run.dir>/var/run/hazelcast-server</rpm.var-run.dir>
                 <rpm.var-lib.dir>/var/lib/hazelcast-server</rpm.var-lib.dir>
                 <rpm.var-log.dir>/var/log/hazelcast-server</rpm.var-log.dir>
+                <rpm.var-cache.dir>/var/cache/hazelcast-server</rpm.var-cache.dir>
+                <rpm.tmp.dir>${rpm.var-cache.dir}/tmp</rpm.tmp.dir>
+                <rpm.heapdumps.dir>${rpm.var-cache.dir}/heapdumps</rpm.heapdumps.dir>
                 <rpm.usr-share.dir>/usr/share/hazelcast-server</rpm.usr-share.dir>
                 <rpm.etc.dir>/etc/hazelcast-server</rpm.etc.dir>
                 <java.min.mem>128</java.min.mem>
@@ -616,6 +619,27 @@
                                             <groupname>${rpm.group}</groupname>
                                         </mapping>
                                         <mapping>
+                                            <directory>${rpm.var-cache.dir}</directory>
+                                            <directoryIncluded>true</directoryIncluded>
+                                            <filemode>755</filemode>
+                                            <username>${rpm.user}</username>
+                                            <groupname>${rpm.group}</groupname>
+                                        </mapping>
+                                        <mapping>
+                                            <directory>${rpm.tmp.dir}</directory>
+                                            <directoryIncluded>true</directoryIncluded>
+                                            <filemode>755</filemode>
+                                            <username>${rpm.user}</username>
+                                            <groupname>${rpm.group}</groupname>
+                                        </mapping>
+                                        <mapping>
+                                            <directory>${rpm.heapdumps.dir}</directory>
+                                            <directoryIncluded>true</directoryIncluded>
+                                            <filemode>755</filemode>
+                                            <username>${rpm.user}</username>
+                                            <groupname>${rpm.group}</groupname>
+                                        </mapping>
+                                        <mapping>
                                             <directory>${rpm.etc.dir}</directory>
                                             <directoryIncluded>true</directoryIncluded>
                                             <configuration>true</configuration>
@@ -633,6 +657,19 @@
                                             <sources>
                                                 <source>
                                                     <location>${rpm.filtered.dir}/etc</location>
+                                                </source>
+                                            </sources>
+                                        </mapping>
+                                        <mapping>
+                                            <directory>/etc/logrotate.d</directory>
+                                            <directoryIncluded>false</directoryIncluded>
+                                            <configuration>true</configuration>
+                                            <filemode>664</filemode>
+                                            <username>root</username>
+                                            <groupname>root</groupname>
+                                            <sources>
+                                                <source>
+                                                    <location>${rpm.filtered.dir}/logrotate</location>
                                                 </source>
                                             </sources>
                                         </mapping>

@@ -1,0 +1,10 @@
+${rpm.var-log.dir}/hazelcast-server.log ${rpm.var-log.dir}/wrapper.log {
+    compress
+    dateext
+    maxage 365
+    rotate 99
+    size=+4096k
+    notifempty
+    missingok
+    create 644
+}
