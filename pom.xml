@@ -719,6 +719,7 @@
                                             <filemode>664</filemode>
                                             <username>${rpm.user}</username>
                                             <groupname>${rpm.group}</groupname>
+                                            <artifact />
                                             <dependency />
                                             <sources>
                                                 <source>
