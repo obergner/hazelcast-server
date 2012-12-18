@@ -692,31 +692,13 @@
                                         <mapping>
                                             <directory>${rpm.usr-share.dir}/bin</directory>
                                             <directoryIncluded>true</directoryIncluded>
+                                            <recurseDirectories />
                                             <filemode>755</filemode>
                                             <username>${rpm.user}</username>
                                             <groupname>${rpm.group}</groupname>
                                             <sources>
                                                 <source>
                                                     <location>src/main/rpm/bin</location>
-                                                    <includes>
-                                                        <include>wrapper.jar</include>
-                                                    </includes>
-                                                </source>
-                                            </sources>
-                                        </mapping>
-                                        <mapping>
-                                            <directory>${rpm.usr-share.dir}/bin/linux-x86-64</directory>
-                                            <directoryIncluded>true</directoryIncluded>
-                                            <filemode>755</filemode>
-                                            <username>${rpm.user}</username>
-                                            <groupname>${rpm.group}</groupname>
-                                            <sources>
-                                                <source>
-                                                    <location>src/main/rpm/bin/linux-x86-64</location>
-                                                    <includes>
-                                                        <include>libwrapper-linux-x86-64.so</include>
-                                                        <include>wrapper-linux-x86-64</include>
-                                                    </includes>
                                                 </source>
                                             </sources>
                                         </mapping>
