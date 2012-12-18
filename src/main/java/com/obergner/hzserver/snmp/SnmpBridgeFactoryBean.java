@@ -18,7 +18,7 @@
  */
 package com.obergner.hzserver.snmp;
 
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.lang.management.ManagementFactory;
 import java.net.InetAddress;
 
@@ -157,7 +157,8 @@ public class SnmpBridgeFactoryBean implements FactoryBean<SnmpBridge>,
 		        this.anmpAgentListenHost, this.snmpAgentListenPort,
 		        this.snmpMappingPropertiesLocation);
 		final JmxMib jmxMib = new JmxMib();
-		jmxMib.load(new FileReader(this.snmpMappingPropertiesLocation.getFile()));
+		jmxMib.load(new InputStreamReader(this.snmpMappingPropertiesLocation
+		        .getInputStream()));
 
 		final JmxIndex jmxIndex = new JmxIndex(getMBeanServer(),
 		        this.mbeanLookupPattern);
