@@ -584,7 +584,7 @@
                                     <packager>Olaf Bergner</packager>
                                     <targetVendor>CentOS</targetVendor>
                                     <needarch>${rpm.arch}</needarch>
-                                    <release>${buildNumber}.${rpm.dist}</release>
+                                    <release>${timestamp}.${rpm.dist}</release>
                                     <distribution>${rpm.dist}</distribution>
                                     <defaultDirmode>755</defaultDirmode>
                                     <defaultFilemode>644</defaultFilemode>
