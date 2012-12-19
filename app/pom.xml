@@ -95,7 +95,9 @@
                                         <require>hazelcast-server-base</require>
                                     </requires>
                                     <defineStatements>
-                                        <defineStatement><![CDATA[workdir /var/lib/hazelcast-server]]></defineStatement>
+                                        <defineStatement><![CDATA[workdir ${rpm.var-lib.dir}]]></defineStatement>
+                                        <defineStatement><![CDATA[rpmuser ${rpm.user}]]></defineStatement>
+                                        <defineStatement><![CDATA[rpmgroup ${rpm.group}]]></defineStatement>
 										<!-- Do not run /usr/lib/rpm/redhat/brp-java-repack-jars: sometimes, it corrupts jars -->
                                         <defineStatement><![CDATA[__jar_repack 0]]></defineStatement>
                                     </defineStatements>
@@ -132,19 +134,19 @@
                                         </mapping>
                                     </mappings>
                                     <preinstallScriptlet>
-                                        <scriptFile>${rpm.filtered.dir}/scriptlet/preinstall</scriptFile>
+                                        <scriptFile>src/main/rpm/scriptlet/preinstall</scriptFile>
                                         <fileEncoding>utf-8</fileEncoding>
                                     </preinstallScriptlet>
                                     <postinstallScriptlet>
-                                        <scriptFile>${rpm.filtered.dir}/scriptlet/postinstall</scriptFile>
+                                        <scriptFile>src/main/rpm/scriptlet/postinstall</scriptFile>
                                         <fileEncoding>utf-8</fileEncoding>
                                     </postinstallScriptlet>
                                     <preremoveScriptlet>
-                                        <scriptFile>${rpm.filtered.dir}/scriptlet/preuninstall</scriptFile>
+                                        <scriptFile>src/main/rpm/scriptlet/preuninstall</scriptFile>
                                         <fileEncoding>utf-8</fileEncoding>
                                     </preremoveScriptlet>
                                     <postremoveScriptlet>
-                                        <scriptFile>${rpm.filtered.dir}/scriptlet/postuninstall</scriptFile>
+                                        <scriptFile>src/main/rpm/scriptlet/postuninstall</scriptFile>
                                         <fileEncoding>utf-8</fileEncoding>
                                     </postremoveScriptlet>
                                 </configuration>

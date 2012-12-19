@@ -1,2 +1,2 @@
-/usr/sbin/groupadd -r ${rpm.group} &>/dev/null || :
-/usr/sbin/useradd -g ${rpm.group} -s /bin/sh -r -c "Hazelcast Server" -d "%{workdir}" ${rpm.user} &>/dev/null || :
+/usr/sbin/groupadd -r %{rpmuser} &>/dev/null || :
+/usr/sbin/useradd -g %{rpmgroup} -s /bin/sh -r -c "Hazelcast Server" -d "%{workdir}" %{rpmuser} &>/dev/null || :
