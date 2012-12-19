@@ -1,1 +1,1 @@
-/sbin/service hazelcast-server condrestart > /dev/null 2>&1
+/sbin/service hazelcast-server condrestart
