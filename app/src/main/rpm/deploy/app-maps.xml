@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) 2012.
+    Olaf Bergner.
+    Hamburg, Germany. olaf.bergner@gmx.de
+    All rights reserved.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an "AS IS"
+    BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+    express or implied. See the License for the specific language
+    governing permissions and limitations under the License.
+
+-->
+<hazelcast
+    xsi:schemaLocation="http://www.hazelcast.com/schema/config hazelcast-config-2.4.xsd"
+    xmlns="http://www.hazelcast.com/schema/config"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <map
+        name="default">
+        <backup-count>1</backup-count>
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <max-idle-seconds>0</max-idle-seconds>
+        <eviction-policy>NONE</eviction-policy>
+        <max-size
+            policy="cluster_wide_map_size">0</max-size>
+        <eviction-percentage>25</eviction-percentage>
+        <merge-policy>hz.ADD_NEW_ENTRY</merge-policy>
+
+        <map-store
+            enabled="false">
+            <properties>
+                <property
+                    name="syncinterval">1</property>
+            </properties>
+            <class-name>org.hazelcast.server.persistence.BerkeleyDBStore</class-name>
+            <write-delay-seconds>0</write-delay-seconds>
+        </map-store>
+    </map>
+
+    <map
+        name="sequence">
+        <backup-count>1</backup-count>
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <max-idle-seconds>0</max-idle-seconds>
+        <eviction-policy>NONE</eviction-policy>
+        <max-size
+            policy="cluster_wide_map_size">0</max-size>
+        <eviction-percentage>25</eviction-percentage>
+        <merge-policy>hz.ADD_NEW_ENTRY</merge-policy>
+
+        <map-store
+            enabled="true">
+            <properties>
+                <property
+                    name="syncinterval">0</property>
+            </properties>
+            <class-name>org.hazelcast.server.persistence.BerkeleyDBStore</class-name>
+            <write-delay-seconds>0</write-delay-seconds>
+        </map-store>
+    </map>
+
+</hazelcast>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.obergner.hazelcast-server</groupId>
+        <artifactId>hazelcast-server-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../parent/</relativePath>
+    </parent>
+
+    <groupId>com.obergner.hazelcast-server</groupId>
+    <artifactId>hazelcast-server-app</artifactId>
+    <packaging>jar</packaging>
+    <name>Hazelcast Server :: Hazelcast Server Application RPM</name>
+    <description>An example maps and queues deployment for Hazelcast Server</description>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-plugin-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>rpm-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+            <!-- REPORTING PLUGINS -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>rpm</id>
+            <activation>
+                <os>
+                    <name>linux</name>
+                    <arch>amd64</arch>
+                    <family>unix</family>
+                </os>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>rpm-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>package-rpm</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>attached-rpm</goal>
+                                </goals>
+                                <configuration>
+                                    <group>Network/Servers</group>
+                                    <name>hazelcast-server-app</name>
+                                    <copyright>2012, Olaf Bergner</copyright>
+                                    <packager>Olaf Bergner</packager>
+                                    <targetVendor>CentOS</targetVendor>
+                                    <needarch>${rpm.arch}</needarch>
+                                    <release>${buildTimestamp}.${rpm.dist}</release>
+                                    <distribution>${rpm.dist}</distribution>
+                                    <defaultDirmode>755</defaultDirmode>
+                                    <defaultFilemode>644</defaultFilemode>
+                                    <requires>
+                                        <require>hazelcast-server-service</require>
+                                    </requires>
+                                    <defineStatements>
+                                        <defineStatement><![CDATA[workdir ${rpm.var-lib.dir}]]></defineStatement>
+                                        <defineStatement><![CDATA[rpmuser ${rpm.user}]]></defineStatement>
+                                        <defineStatement><![CDATA[rpmgroup ${rpm.group}]]></defineStatement>
+										<!-- Do not run /usr/lib/rpm/redhat/brp-java-repack-jars: sometimes, it corrupts jars -->
+                                        <defineStatement><![CDATA[__jar_repack 0]]></defineStatement>
+                                    </defineStatements>
+                                    <mappings>
+                                        <mapping>
+                                            <directory>${rpm.var-lib.dir}/deploy</directory>
+                                            <directoryIncluded>false</directoryIncluded>
+                                            <filemode>755</filemode>
+                                            <username>${rpm.user}</username>
+                                            <groupname>${rpm.group}</groupname>
+                                            <sources>
+                                                <source>
+                                                    <location>src/main/rpm/deploy</location>
+                                                    <filter>false</filter>
+                                                </source>
+                                            </sources>
+                                        </mapping>
+                                    </mappings>
+                                    <preinstallScriptlet>
+                                        <scriptFile>src/main/rpm/scriptlet/preinstall</scriptFile>
+                                        <fileEncoding>utf-8</fileEncoding>
+                                    </preinstallScriptlet>
+                                    <postinstallScriptlet>
+                                        <scriptFile>src/main/rpm/scriptlet/postinstall</scriptFile>
+                                        <fileEncoding>utf-8</fileEncoding>
+                                    </postinstallScriptlet>
+                                    <preremoveScriptlet>
+                                        <scriptFile>src/main/rpm/scriptlet/preuninstall</scriptFile>
+                                        <fileEncoding>utf-8</fileEncoding>
+                                    </preremoveScriptlet>
+                                    <postremoveScriptlet>
+                                        <scriptFile>src/main/rpm/scriptlet/postuninstall</scriptFile>
+                                        <fileEncoding>utf-8</fileEncoding>
+                                    </postremoveScriptlet>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
