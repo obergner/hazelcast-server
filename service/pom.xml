@@ -15,9 +15,9 @@
     </parent>
 
     <groupId>com.obergner.hazelcast-server</groupId>
-    <artifactId>hazelcast-server-app</artifactId>
+    <artifactId>hazelcast-server-service</artifactId>
     <packaging>jar</packaging>
-    <name>Hazelcast Server :: Hazelcast Server Application RPM</name>
+    <name>Hazelcast Server :: Hazelcast Server Service RPM</name>
     <description>Configuration and service script for Hazelcast Server</description>
 
     <build>
@@ -79,7 +79,7 @@
                                 </goals>
                                 <configuration>
                                     <group>Network/Servers</group>
-                                    <name>hazelcast-server-app</name>
+                                    <name>hazelcast-server-service</name>
                                     <copyright>2012, Olaf Bergner</copyright>
                                     <packager>Olaf Bergner</packager>
                                     <targetVendor>CentOS</targetVendor>
