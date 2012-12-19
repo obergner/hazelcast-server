@@ -28,7 +28,11 @@ import javax.management.NotCompliantMBeanException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.ContextStoppedEvent;
+import org.springframework.context.support.GenericApplicationContext;
 
 /**
  * <p>
@@ -95,10 +99,29 @@ public final class Main {
 
 		this.serverInfo.logBootStart();
 
-		new ClassPathXmlApplicationContext(
+		final GenericApplicationContext ctx = new GenericApplicationContext();
+		final XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(
+		        ctx);
+		xmlReader.loadBeanDefinitions(
 		        "classpath:META-INF/spring/hz-server-main-context.xml",
-		        "classpath*:META-INF/spring/hz-cache-context.xml")
-		        .registerShutdownHook();
+		        "classpath*:META-INF/spring/hz-cache-context.xml");
+		ctx.registerShutdownHook();
+		ctx.addApplicationListener(new ApplicationListener<ContextRefreshedEvent>() {
+
+			@Override
+			public void onApplicationEvent(final ContextRefreshedEvent event) {
+				Main.this.serverInfo.logBootCompleted();
+
+			}
+		});
+		ctx.addApplicationListener(new ApplicationListener<ContextStoppedEvent>() {
+
+			@Override
+			public void onApplicationEvent(final ContextStoppedEvent event) {
+				Main.this.serverInfo.logShutdownCompleted();
+			}
+		});
+		ctx.refresh();
 	}
 
 	void stop() throws Exception {

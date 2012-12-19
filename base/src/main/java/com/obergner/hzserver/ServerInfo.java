@@ -189,11 +189,18 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 		logStringEntries("SystemProperties", getSystemProperties(), " -D");
 	}
 
-	@Override
 	public void logBootCompleted() {
 		this.log.info("================================================================================================");
 		this.log.info("{} booted in [{}] ms", getName(),
 		        System.currentTimeMillis() - getStartTime().getTime());
+		this.log.info("================================================================================================");
+	}
+
+	public void logShutdownCompleted() {
+		this.log.info("================================================================================================");
+		this.log.info(
+		        "{}, started on {}, completed shutdown after an uptime of [{}] ms",
+		        getName(), getStartTime(), getUptimeMillis());
 		this.log.info("================================================================================================");
 	}
 

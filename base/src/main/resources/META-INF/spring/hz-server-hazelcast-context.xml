@@ -33,7 +33,7 @@
 
     <!-- START-SNIPPET: Hazelcast configuration -->
     <bean
-        id="com.obergner.hzserverhazelcastConfiguration"
+        id="com.obergner.hzserver.hazelcastConfiguration"
         class="com.obergner.hzserver.pluggable.ComposableXmlConfigFactoryBean"
         p:globalXmlConfigFile="${hazelcast-server.globalXmlConfigFile}"
         p:dataRootDirectory="${hazelcast-server.dataRootDirectory}"
@@ -42,22 +42,10 @@
     
     <!-- START-SNIPPET: Hazelcast service -->
     <bean
-        id="com.obergner.hzserver.serverInfoMBean"
-        class="org.springframework.jmx.access.MBeanProxyFactoryBean">
-        <property
-            name="objectName"
-            value="com.obergner.hzserver:name=ServerInfo" />
-        <property
-            name="proxyInterface"
-            value="com.obergner.hzserver.ServerInfoMBean" />
-    </bean>
-
-    <bean
-        id="com.obergner.hzserverhazelcastService"
+        id="com.obergner.hzserver.hazelcastService"
         class="com.obergner.hzserver.HazelcastService"
-        c:configuration-ref="com.obergner.hzserverhazelcastConfiguration"
-        c:metricsRegistry-ref="com.obergner.hzservermetricsRegistry"
-        c:serverInfo-ref="com.obergner.hzserver.serverInfoMBean" />
+        c:configuration-ref="com.obergner.hzserver.hazelcastConfiguration"
+        c:metricsRegistry-ref="com.obergner.hzserver.metricsRegistry" />
 	<!-- END-SNIPPET: Hazelcast service -->
 
 </beans>

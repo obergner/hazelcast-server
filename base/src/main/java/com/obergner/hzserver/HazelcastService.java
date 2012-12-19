@@ -51,22 +51,17 @@ public class HazelcastService implements SmartLifecycle {
 
 	private final MetricsRegistry	        metricsRegistry;
 
-	private final ServerInfoMBean	        serverInfo;
-
 	private volatile HazelcastInstanceProxy	hazelcastInstance;
 
 	/**
 	 * @param configuration
 	 */
 	public HazelcastService(final Config configuration,
-	        final MetricsRegistry metricsRegistry,
-	        final ServerInfoMBean serverInfo) {
+	        final MetricsRegistry metricsRegistry) {
 		this.configuration = checkNotNull(configuration,
 		        "Argument 'configuration' must not be null");
 		this.metricsRegistry = checkNotNull(metricsRegistry,
 		        "Argument 'metricsRegistry' must not be null");
-		this.serverInfo = checkNotNull(serverInfo,
-		        "Argument 'serverInfo' must not be null");
 	}
 
 	/**
@@ -92,9 +87,6 @@ public class HazelcastService implements SmartLifecycle {
 		        });
 
 		this.log.info("{} started in [{}] ms", this, startupDuration);
-
-		// We now finished booting
-		this.serverInfo.logBootCompleted();
 	}
 
 	/**
