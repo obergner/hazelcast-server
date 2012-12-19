@@ -26,7 +26,12 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.management.InstanceNotFoundException;
+import javax.management.MBeanRegistrationException;
+
 import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.hazelcast.config.Config;
@@ -34,6 +39,19 @@ import com.hazelcast.core.Hazelcast;
 import com.yammer.metrics.Metrics;
 
 public class HazelcastServiceTest {
+
+	private static ServerInfo	serverInfo;
+
+	@BeforeClass
+	public static void registerServerInfoMBean() throws Exception {
+		serverInfo = new ServerInfo();
+	}
+
+	@AfterClass
+	public static void unregisterServerInfoMBean()
+	        throws MBeanRegistrationException, InstanceNotFoundException {
+		serverInfo.unregister();
+	}
 
 	@After
 	public void shutdownAllHazelcastInstances() {
@@ -50,7 +68,12 @@ public class HazelcastServiceTest {
 	}
 
 	private HazelcastService newObjectUnderTest() {
-		return new HazelcastService(new Config(), Metrics.defaultRegistry());
+		try {
+			return new HazelcastService(new Config(),
+			        Metrics.defaultRegistry(), serverInfo);
+		} catch (final Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test(expected = IllegalStateException.class)

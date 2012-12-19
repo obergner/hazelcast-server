@@ -42,7 +42,7 @@
     
     <!-- START-SNIPPET: Hazelcast service -->
     <bean
-        id="com.obergner.hzserverserverInfoMBean"
+        id="com.obergner.hzserver.serverInfoMBean"
         class="org.springframework.jmx.access.MBeanProxyFactoryBean">
         <property
             name="objectName"
@@ -56,7 +56,8 @@
         id="com.obergner.hzserverhazelcastService"
         class="com.obergner.hzserver.HazelcastService"
         c:configuration-ref="com.obergner.hzserverhazelcastConfiguration"
-        c:metricsRegistry-ref="com.obergner.hzservermetricsRegistry" />
+        c:metricsRegistry-ref="com.obergner.hzservermetricsRegistry"
+        c:serverInfo-ref="com.obergner.hzserver.serverInfoMBean" />
 	<!-- END-SNIPPET: Hazelcast service -->
 
 </beans>

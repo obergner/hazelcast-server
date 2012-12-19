@@ -93,7 +93,7 @@ public final class Main {
 	void start() throws Exception {
 		enableHangupSupport();
 
-		this.serverInfo.logBanner();
+		this.serverInfo.logBootStart();
 
 		new ClassPathXmlApplicationContext(
 		        "classpath:META-INF/spring/hz-server-main-context.xml",

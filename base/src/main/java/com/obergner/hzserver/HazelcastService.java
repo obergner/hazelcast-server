@@ -51,17 +51,22 @@ public class HazelcastService implements SmartLifecycle {
 
 	private final MetricsRegistry	        metricsRegistry;
 
+	private final ServerInfoMBean	        serverInfo;
+
 	private volatile HazelcastInstanceProxy	hazelcastInstance;
 
 	/**
 	 * @param configuration
 	 */
 	public HazelcastService(final Config configuration,
-	        final MetricsRegistry metricsRegistry) {
+	        final MetricsRegistry metricsRegistry,
+	        final ServerInfoMBean serverInfo) {
 		this.configuration = checkNotNull(configuration,
 		        "Argument 'configuration' must not be null");
 		this.metricsRegistry = checkNotNull(metricsRegistry,
 		        "Argument 'metricsRegistry' must not be null");
+		this.serverInfo = checkNotNull(serverInfo,
+		        "Argument 'serverInfo' must not be null");
 	}
 
 	/**
@@ -70,9 +75,8 @@ public class HazelcastService implements SmartLifecycle {
 	@Override
 	public void start() {
 		checkState(this.hazelcastInstance == null,
-		        "HazelcastService {} has already been started", this);
-		this.log.info("Starting Hazelcast instance \"{}\" using ...",
-		        this.configuration);
+		        "{} has already been started", this);
+		this.log.info("Starting {} using ...", this.configuration);
 
 		final long start = System.currentTimeMillis();
 		this.hazelcastInstance = FactoryImpl
@@ -87,8 +91,10 @@ public class HazelcastService implements SmartLifecycle {
 			        }
 		        });
 
-		this.log.info("HazelcastService \"{}\" started in [{}] ms", this,
-		        startupDuration);
+		this.log.info("{} started in [{}] ms", this, startupDuration);
+
+		// We now finished booting
+		this.serverInfo.logBootCompleted();
 	}
 
 	/**
@@ -96,15 +102,14 @@ public class HazelcastService implements SmartLifecycle {
 	 */
 	@Override
 	public void stop() {
-		checkState(this.hazelcastInstance != null,
-		        "HazelcastService {} is not running", this);
+		checkState(this.hazelcastInstance != null, "{} is not running", this);
 		this.log.info("Shutting down Hazelcast instance {} ...",
 		        this.hazelcastInstance);
 
 		this.metricsRegistry.removeMetric(getClass(), STARTUP_DURATION_GAUGE);
 		this.hazelcastInstance.shutdown();
 
-		this.log.info("Hazelcast instance {} shut down", this.hazelcastInstance);
+		this.log.info("{} shut down", this.hazelcastInstance);
 
 		this.hazelcastInstance = null;
 	}

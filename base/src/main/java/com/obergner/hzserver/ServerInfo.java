@@ -30,7 +30,9 @@ import java.util.Date;
 import java.util.Map;
 import java.util.jar.Manifest;
 
+import javax.annotation.PreDestroy;
 import javax.management.InstanceAlreadyExistsException;
+import javax.management.InstanceNotFoundException;
 import javax.management.MBeanRegistrationException;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
@@ -69,6 +71,8 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 
 	private final Manifest	    serverManifest;
 
+	private final ObjectName	objectName;
+
 	/**
 	 * @throws IOException
 	 * @throws MalformedURLException
@@ -84,10 +88,10 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	        NotCompliantMBeanException, MalformedObjectNameException,
 	        NullPointerException {
 		this.serverManifest = loadServerManifest();
-		ManagementFactory.getPlatformMBeanServer().registerMBean(
-		        this,
-		        new ObjectName(getClass().getPackage().getName()
-		                + ":name=ServerInfo"));
+		this.objectName = new ObjectName(getClass().getPackage().getName()
+		        + ":name=ServerInfo");
+		ManagementFactory.getPlatformMBeanServer().registerMBean(this,
+		        this.objectName);
 	}
 
 	private Manifest loadServerManifest() throws MalformedURLException,
@@ -111,7 +115,7 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 		return Integer.MIN_VALUE + 1000;
 	}
 
-	public void logBanner() {
+	public void logBootStart() {
 		this.log.info("================================================================================================");
 		this.log.info(formatLogLine("Name", getName()));
 		this.log.info(formatLogLine("Version", getVersion()));
@@ -183,6 +187,14 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 
 	private void logSystemProperties() {
 		logStringEntries("SystemProperties", getSystemProperties(), " -D");
+	}
+
+	@Override
+	public void logBootCompleted() {
+		this.log.info("================================================================================================");
+		this.log.info("{} booted in [{}] ms", getName(),
+		        System.currentTimeMillis() - getStartTime().getTime());
+		this.log.info("================================================================================================");
 	}
 
 	// ------------------------------------------------------------------------
@@ -360,6 +372,13 @@ public final class ServerInfo implements Phased, ServerInfoMBean {
 	@Override
 	public int getMaxNonHeapMemoryInMBs() {
 		return bytesToMBs(memory().getNonHeapMemoryUsage().getMax());
+	}
+
+	@PreDestroy
+	public void unregister() throws MBeanRegistrationException,
+	        InstanceNotFoundException {
+		ManagementFactory.getPlatformMBeanServer().unregisterMBean(
+		        this.objectName);
 	}
 
 	/**

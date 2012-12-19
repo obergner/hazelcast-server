@@ -79,4 +79,11 @@ public interface ServerInfoMBean {
 	int getCommittedNonHeapMemoryInMBs();
 
 	int getMaxNonHeapMemoryInMBs();
+
+	// ------------------------------------------------------------------------
+
+	/*
+	 * FIXME: Hack.
+	 */
+	void logBootCompleted();
 }
