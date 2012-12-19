@@ -102,7 +102,7 @@
                                         <mapping>
                                             <directory>${rpm.var-lib.dir}/deploy</directory>
                                             <directoryIncluded>false</directoryIncluded>
-                                            <filemode>755</filemode>
+                                            <filemode>0644</filemode>
                                             <username>${rpm.user}</username>
                                             <groupname>${rpm.group}</groupname>
                                             <sources>
