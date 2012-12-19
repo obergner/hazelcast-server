@@ -213,50 +213,8 @@
                 </os>
             </activation>
 
-            <properties>
-                <rpm.filtered.dir>${project.build.directory}/rpm-filtered</rpm.filtered.dir>
-                <rpm.version>1.0.0</rpm.version>
-                <rpm.dist>el6</rpm.dist>
-                <rpm.arch>x86_64</rpm.arch>
-                <rpm.user>hazelcast</rpm.user>
-                <rpm.group>hazelcast</rpm.group>
-                <rpm.var-run.dir>/var/run/hazelcast-server</rpm.var-run.dir>
-                <rpm.var-lib.dir>/var/lib/hazelcast-server</rpm.var-lib.dir>
-                <rpm.var-log.dir>/var/log/hazelcast-server</rpm.var-log.dir>
-                <rpm.var-cache.dir>/var/cache/hazelcast-server</rpm.var-cache.dir>
-                <rpm.tmp.dir>${rpm.var-cache.dir}/tmp</rpm.tmp.dir>
-                <rpm.heapdumps.dir>${rpm.var-cache.dir}/heapdumps</rpm.heapdumps.dir>
-                <rpm.usr-share.dir>/usr/share/hazelcast-server</rpm.usr-share.dir>
-                <rpm.etc.dir>/etc/hazelcast-server</rpm.etc.dir>
-                <java.min.mem>128</java.min.mem>
-                <java.max.mem>512</java.max.mem>
-                <java.min.perm>64</java.min.perm>
-                <java.max.perm>128</java.max.perm>
-            </properties>
-
             <build>
-                <resources>
-                    <resource>
-                        <directory>${project.basedir}/src/main/rpm</directory>
-                        <filtering>true</filtering>
-                        <targetPath>${rpm.filtered.dir}</targetPath>
-                    </resource>
-                </resources>
                 <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-resources-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>copy-filtered-rpm-resources</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>resources</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>rpm-maven-plugin</artifactId>
@@ -269,7 +227,7 @@
                                 </goals>
                                 <configuration>
                                     <group>Network/Servers</group>
-                                    <name>hazelcast-server</name>
+                                    <name>hazelcast-server-base</name>
                                     <copyright>2012, Olaf Bergner</copyright>
                                     <packager>Olaf Bergner</packager>
                                     <targetVendor>CentOS</targetVendor>
@@ -346,7 +304,8 @@
                                             <groupname>root</groupname>
                                             <sources>
                                                 <source>
-                                                    <location>${rpm.filtered.dir}/etc</location>
+                                                    <location>src/main/rpm/etc</location>
+                                                    <filter>true</filter>
                                                 </source>
                                             </sources>
                                         </mapping>
@@ -359,22 +318,8 @@
                                             <groupname>root</groupname>
                                             <sources>
                                                 <source>
-                                                    <location>${rpm.filtered.dir}/logrotate</location>
-                                                </source>
-                                            </sources>
-                                        </mapping>
-                                        <mapping>
-                                            <directory>/etc/init.d</directory>
-                                            <directoryIncluded>false</directoryIncluded>
-                                            <filemode>755</filemode>
-                                            <username>root</username>
-                                            <groupname>root</groupname>
-                                            <sources>
-                                                <source>
-                                                    <location>${rpm.filtered.dir}/service</location>
-                                                    <includes>
-                                                        <include>hazelcast-server</include>
-                                                    </includes>
+                                                    <location>src/main/rpm/logrotate</location>
+                                                    <filter>true</filter>
                                                 </source>
                                             </sources>
                                         </mapping>
@@ -435,6 +380,7 @@
                                             <sources>
                                                 <source>
                                                     <location>src/main/rpm/bin</location>
+                                                    <filter>false</filter>
                                                 </source>
                                             </sources>
                                         </mapping>

@@ -91,6 +91,27 @@
         <plugins.surefire-reports.version>2.12.4</plugins.surefire-reports.version>
         <plugins.pmd.version>2.7.1</plugins.pmd.version>
         <plugins.project-info-reports.version>2.6</plugins.project-info-reports.version>
+        <!-- ######################################################### -->
+        <!-- RPM related settings -->
+        <!-- ######################################################### -->
+        <rpm.filtered.dir>${project.build.directory}/rpm-filtered</rpm.filtered.dir>
+        <rpm.version>1.0.0</rpm.version>
+        <rpm.dist>el6</rpm.dist>
+        <rpm.arch>x86_64</rpm.arch>
+        <rpm.user>hazelcast</rpm.user>
+        <rpm.group>hazelcast</rpm.group>
+        <rpm.var-run.dir>/var/run/hazelcast-server</rpm.var-run.dir>
+        <rpm.var-lib.dir>/var/lib/hazelcast-server</rpm.var-lib.dir>
+        <rpm.var-log.dir>/var/log/hazelcast-server</rpm.var-log.dir>
+        <rpm.var-cache.dir>/var/cache/hazelcast-server</rpm.var-cache.dir>
+        <rpm.tmp.dir>${rpm.var-cache.dir}/tmp</rpm.tmp.dir>
+        <rpm.heapdumps.dir>${rpm.var-cache.dir}/heapdumps</rpm.heapdumps.dir>
+        <rpm.usr-share.dir>/usr/share/hazelcast-server</rpm.usr-share.dir>
+        <rpm.etc.dir>/etc/hazelcast-server</rpm.etc.dir>
+        <java.min.mem>128</java.min.mem>
+        <java.max.mem>512</java.max.mem>
+        <java.min.perm>64</java.min.perm>
+        <java.max.perm>128</java.max.perm>
     </properties>
 
     <!-- =================================================== -->
