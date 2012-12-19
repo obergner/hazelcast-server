@@ -41,10 +41,10 @@
     
 	<!-- START-SNIPPET: general settings -->
     <context:mbean-server
-        id="vnet.infrastructure.hazelcast-server.mbeanServer" />
+        id="com.obergner.hzservermbeanServer" />
     <context:mbean-export
         registration="failOnExisting"
-        server="vnet.infrastructure.hazelcast-server.mbeanServer"
+        server="com.obergner.hzservermbeanServer"
         default-domain="com.obergner.hzserver" />
     <context:property-placeholder
         location="classpath:hazelcast-server.properties" />
@@ -52,16 +52,16 @@
 
     <!-- START-SNIPPET: metrics support -->
     <metrics:annotation-driven
-        metrics-registry="vnet.infrastructure.hazelcast-server.metricsRegistry"
-        health-check-registry="vnet.infrastructure.hazelcast-server.healthCheckRegistry"
+        metrics-registry="com.obergner.hzservermetricsRegistry"
+        health-check-registry="com.obergner.hzserverhealthCheckRegistry"
         proxy-target-class="false" />
     <metrics:metrics-registry
-        id="vnet.infrastructure.hazelcast-server.metricsRegistry" />
+        id="com.obergner.hzservermetricsRegistry" />
     <metrics:health-check-registry
-        id="vnet.infrastructure.hazelcast-server.healthCheckRegistry" />
+        id="com.obergner.hzserverhealthCheckRegistry" />
     <metrics:jmx-reporter
-        id="vnet.infrastructure.hazelcast-server.metricsJmxReporter"
-        metrics-registry="vnet.infrastructure.hazelcast-server.metricsRegistry" />
+        id="com.obergner.hzservermetricsJmxReporter"
+        metrics-registry="com.obergner.hzservermetricsRegistry" />
 	<!-- END-SNIPPET: metrics support -->
 
 </beans>

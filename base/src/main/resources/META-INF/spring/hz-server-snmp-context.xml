@@ -33,12 +33,12 @@
 
 	<!-- START-SNIPPET: SnmpBridge -->
     <bean
-        id="vnet.infrastructure.hazelcast-server.snmpBridge"
+        id="com.obergner.hzserversnmpBridge"
         class="com.obergner.hzserver.snmp.SnmpBridgeFactoryBean"
         p:anmpAgentListenHost="localhost"
         p:snmpAgentListenPort="1161"
         p:snmpMappingPropertiesLocation="classpath:META-INF/snmp/jmx-snmp.properties"
-        p:mbeanServer-ref="vnet.infrastructure.hazelcast-server.mbeanServer"
+        p:mbeanServer-ref="com.obergner.hzservermbeanServer"
         p:mbeanLookupPattern="*:name=*" />
 	<!-- END-SNIPPET: SnmpBridge -->
 
