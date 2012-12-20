@@ -34,9 +34,9 @@ public class ComposableXmlConfigBuilderTest {
 
 	private static final String	CONFIG_FILE	= "global/composable-xml-config-test-config.xml";
 
-	private static final String	MAPS_FILE	= "data/composable-xml-config-test-maps.xml";
+	private static final String	MAPS_FILE	= "data/subdir/composable-xml-config-test-maps.xml";
 
-	private static final String	QUEUES_FILE	= "data/composable-xml-config-test-queues.xml";
+	private static final String	QUEUES_FILE	= "data/subdir/composable-xml-config-test-queues.xml";
 
 	@Test
 	public final void assertThatBuildProducesCompleteConfiguration()

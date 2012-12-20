@@ -71,26 +71,58 @@ public class DirectoryScanner {
 	}
 
 	public void scan() {
-		this.log.info("Scanning files in directory [{}] matching [*{}] ...",
-		        this.rootDirectory, this.suffix);
-		final FileFilter suffixBasedFilter = new FileFilter() {
+		this.log.info(
+		        "Scanning files matching [*{}] in subdirectories of [{}] ...",
+		        this.suffix, this.rootDirectory);
+		final FileFilter isDirectory = new FileFilter() {
+
 			@Override
-			public boolean accept(final File pathname) {
-				return pathname.isFile()
-				        && pathname.getName().endsWith(
-				                DirectoryScanner.this.suffix);
+			public boolean accept(final File arg0) {
+				return arg0.isDirectory();
 			}
 		};
-		final File[] allMatchingFiles = this.rootDirectory
-		        .listFiles(suffixBasedFilter);
-		this.log.debug("Found {} files matching [*{}] in directory [{}]: {}",
-		        new Object[] { allMatchingFiles.length, this.suffix,
-		                this.rootDirectory, Arrays.toString(allMatchingFiles) });
-		for (final File matchingFile : allMatchingFiles) {
-			scanFile(matchingFile);
+		final File[] subdirs = this.rootDirectory.listFiles(isDirectory);
+		this.log.info(
+		        "Found {} subdirectories located in [{}]: {}",
+		        new Object[] { subdirs.length, this.rootDirectory,
+		                Arrays.toString(subdirs) });
+		for (final File subdir : subdirs) {
+			scanDirectory(subdir);
 		}
-		this.log.info("Scanned {} files in directory [{}] matching [*{}] ...",
-		        allMatchingFiles.length, this.rootDirectory, this.suffix);
+		this.log.info(
+		        "Finished scanning files matching [*{}] in subdirectories of [{}]",
+		        this.suffix, this.rootDirectory);
+	}
+
+	private void scanDirectory(final File directory) {
+		try {
+			this.log.info(
+			        "Scanning files in directory [{}] matching [*{}] ...",
+			        directory, this.suffix);
+			final FileFilter suffixBasedFilter = new FileFilter() {
+				@Override
+				public boolean accept(final File pathname) {
+					return pathname.isFile()
+					        && pathname.getName().endsWith(
+					                DirectoryScanner.this.suffix);
+				}
+			};
+			final File[] allMatchingFiles = directory
+			        .listFiles(suffixBasedFilter);
+			this.log.debug(
+			        "Found {} files matching [*{}] in directory [{}]: {}",
+			        new Object[] { allMatchingFiles.length, this.suffix,
+			                directory, Arrays.toString(allMatchingFiles) });
+			for (final File matchingFile : allMatchingFiles) {
+				scanFile(matchingFile);
+			}
+			this.log.info(
+			        "Scanned {} files in directory [{}] matching [*{}] ...",
+			        allMatchingFiles.length, directory, this.suffix);
+		} catch (final Exception e) {
+			this.log.error("Failed to scan directory [" + directory
+			        + "] - will be skipped", e);
+		}
 	}
 
 	private void scanFile(final File file) {

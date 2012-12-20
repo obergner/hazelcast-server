@@ -102,6 +102,7 @@
                                         <mapping>
                                             <directory>${rpm.var-lib.dir}/deploy</directory>
                                             <directoryIncluded>false</directoryIncluded>
+                                            <recurseDirectories>true</recurseDirectories>
                                             <filemode>0644</filemode>
                                             <username>${rpm.user}</username>
                                             <groupname>${rpm.group}</groupname>

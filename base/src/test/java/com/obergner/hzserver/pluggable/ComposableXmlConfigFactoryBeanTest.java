@@ -42,8 +42,8 @@ public class ComposableXmlConfigFactoryBeanTest {
 		final ComposableXmlConfigFactoryBean objectUnderTest = new ComposableXmlConfigFactoryBean();
 		objectUnderTest.setGlobalXmlConfigFile(new ClassPathResource(
 		        CONFIG_FILE, getClass()));
-		objectUnderTest.setDataRootDirectory(new ClassPathResource("data/",
-		        getClass()));
+		objectUnderTest.setDataRootDirectory(new ClassPathResource(
+		        "data/subdir/", getClass()));
 		objectUnderTest.setDataFileSuffix(".xml");
 		return objectUnderTest;
 	}
