@@ -3,8 +3,8 @@ hazelcast-server
 
 A cache server based on the popular open-source distributed data grid [Hazelcast](http://www.hazelcast.com/).
 
-Synopsis
---------
+Rationale
+---------
 
 [Hazelcast](http://www.hazelcast.com/), an in-memory data-grid, is usually deployed *in process*, i.e. an application *embeds* a hazelcast node running withing the same JVM. Also supported is running a cluster of dedicated hazelcast server instances where applications access that cluster remotely, via Hazelcast's [native client](http://www.hazelcast.com/docs/2.4/manual/multi_html/ch15.html#NativeClient).
 
@@ -26,3 +26,41 @@ The company I'm working for chose the latter option, hoping to thus reap some co
 
   Offloading an application's caching needs to a dedicated server benefits it in at least two - to us - important aspects: more predictable startup time and more predictable memory consumption. We strive to keep our applications as small and focused as possible, and this helps a lot.
   
+* One-stop shop for all our caching needs
+
+  By setting up only one or at most a few dedicated Hazelcast clusters we hope to never have to worry again about caching in the future. This is a problem that's being taken care of.
+  
+* Better tuning options
+
+  By keeping our applications' memory consumption low and predictable we hope to be able to tune them better for their specific purposes. In many cases we might be able to get around having to tune Java's notoriously complex garbage collection.
+  
+To coin YAB - Yet Another Buzzword - we want to introduce *Caching As A Service* (TM).
+
+Requirements
+------------
+
+That's all nice and dandy, you may say, but why troubling yourself with implementing an own solution when Hazelcast offers one [out of the box](http://stackoverflow.com/a/10395372/1427088):
+
+    java -cp hazelcast-2.0.3.jar com.hazelcast.examples.StartServer
+ 
+Well, I don't know about you, but to me that's not exactly what I would call production-ready. In our situation we have to satisfy some requirements not covered by that innocent solution above:
+
+* Runs as a linux service
+
+  Yes, all our applications are supposed to be well-behaved linux services, supporting the usual
+  
+      /etc/init.d/application (start|stop|restart|status|condrestart)
+    
+* Supports "deploying" map/queue definitions per application
+
+  We want a server each client may easily deploy map/queue definitions into. In other words, we want a *modularized* server configuration, *not* one big kitchen-sink configuration file.
+  
+* Is packaged as an RPM
+
+  *Continuous Delivery* is a hot topic for us, and one building block in our solution is to have as many of our applications as feasible packaged and deployed as RPMs. Use your OS' native package management, the days of the venerable *.tar.gz* are over.
+  
+
+
+
+
+
