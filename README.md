@@ -6,7 +6,7 @@ A cache server based on the popular open-source distributed data grid [Hazelcast
 Rationale
 ---------
 
-[Hazelcast](http://www.hazelcast.com/), an in-memory data-grid, is usually deployed *in process*, i.e. an application *embeds* a hazelcast node running withing the same JVM. Also supported is running a cluster of dedicated hazelcast server instances where applications access that cluster remotely, via Hazelcast's [native client](http://www.hazelcast.com/docs/2.4/manual/multi_html/ch15.html#NativeClient).
+[Hazelcast](http://www.hazelcast.com/), an in-memory data-grid, is usually deployed *in process*, i.e. an application *embeds* a hazelcast node running within the same JVM. Also supported is running a cluster of dedicated hazelcast server instances where applications access that cluster remotely, via Hazelcast's [native client](http://www.hazelcast.com/docs/2.4/manual/multi_html/ch15.html#NativeClient).
 
 The company I'm working for chose the latter option, hoping to thus reap some considerable advantages over the in process deployment:
 
