@@ -74,12 +74,32 @@ As a proof of concept I implemented a Hazelcast server that does its best to ful
 RPM package organization
 ------------------------
 
-*hazelcast-server-base* and *hazelcast-server-service* install the following files and directories:
+*hazelcast-server-base* installs the following files and directories:
 
-* `/usr/share/hazelcast-server/{bin,lib,logs,deploy}`
+* `/etc/hazelcast-server/{hazelcast-server.properties,logback.xml,wrapper.conf}`
 
-  *hazelcast-server's* `${HOME}`. Mainly contains its jar files in sub directory `lib`. 
+  *hazelcast-server's* configuration directory, containing some basic settings, [logback's](http://logback.qos.ch/) and *Java service Wrapper's* configuration files.
+  
+* `/var/lib/hazelcast-server/{deploy}`
 
+  Where each application using *hazelcast-server* is supposed to deploy its map, queue a.s.f. definitions into. There is one subdirectory beneath `deploy/` per application.
+  
+* `/var/run/hazelcast-server`
 
+  Where *hazelcast-server's* service script writes its pid file to.
+  
+* `/var/log/hazelcast-server`
 
+  Where *hazelcast-server* writes its log files to.
+  
+* `/var/cache/{tmp,heapdumps}`
 
+  Where tmpfiles and heapdumps are written to. *hazelcast-server* starts with `-Djava.io.tmpdir=/var/cache/tmp` and `-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/cache/heapdumps`.
+
+* `/usr/share/hazelcast-server/{bin,lib,conf,logs,deploy}`
+
+  *hazelcast-server's* `${HOME}`. Mainly contains its jar files in sub directory `lib`, whereas `bin` contains files needed by *Java Service Wrapper*.  `conf`, `logs` and `deploy` are symlinks to `/etc/hazelcast-server`, `/var/log/hazelcast-server` and `/var/lib/hazelcast-server/deploy`, respectively.
+
+* `/etc/logrotate.d/hazelcast-server`
+
+  Simple [logrotate](http://en.gentoo-wiki.com/wiki/Logrotate) configuration for *hazelcast-server*.
