@@ -39,7 +39,7 @@ To coin YAB - Yet Another Buzzword - we want to introduce *Caching As A Service*
 Requirements
 ------------
 
-That's all nice and dandy, you may say, but why troubling yourself with implementing an own solution when Hazelcast offers one [out of the box](http://stackoverflow.com/a/10395372/1427088):
+That's all nice and dandy, you may say, but why troubling yourself with implementing your own solution when Hazelcast offers one [out of the box](http://stackoverflow.com/a/10395372/1427088):
 
     java -cp hazelcast-2.0.3.jar com.hazelcast.examples.StartServer
  
