@@ -51,15 +51,24 @@ Well, I don't know about you, but to me that's not exactly what I would call pro
   
       /etc/init.d/application (start|stop|restart|status|condrestart)
     
-* Supports "deploying" map/queue definitions per application
+* Supports "deploying" map etc. definitions per application
 
-  We want a server each client may easily deploy map/queue definitions into. In other words, we want a *modularized* server configuration, *not* one big kitchen-sink configuration file.
+  We want a server each client may easily deploy map definitions into. In other words, we want a *modularized* server configuration, *not* one big kitchen-sink configuration file.
   
 * Packaged as an RPM
 
   *Continuous Delivery* is a hot topic for us, and one building block in our solution is to have as many of our applications as feasible packaged and deployed as RPMs. Use your OS' native package management, the days of the venerable *.tar.gz* are over.
   
+Solution
+--------
 
+As a proof of concept I implemented a Hazelcast server that does its best to fulfill all the requirements listed above. To be specific I
+
+* found a [solution](https://github.com/obergner/hazelcast-server/tree/master/base/src/main/java/com/obergner/hzserver) for modularizing Hazelcast's usually monolithic XML configuration,
+* exposed a few select MBean attributes via SNMP, using Torsten Curdt's excellent little [jmx2snmp](https://github.com/tcurdt/jmx2snmp) library (since operations is having a hard time integrating MBeans and Icinga),
+* plugged all the pieces into each other using [Spring](http://www.springsource.org/), an IOC container you might have heard of already,
+* wrapped the result into an RPM package *hazelcast-server-base* using the rather useful [RPM Maven Plugin](http://mojo.codehaus.org/rpm-maven-plugin/), where that RPM includes neither configuration nor a service script (hint: Configurationless Application),
+* bundled 
 
 
 
