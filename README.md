@@ -103,3 +103,50 @@ RPM package organization
 * `/etc/logrotate.d/hazelcast-server`
 
   Simple [logrotate](http://en.gentoo-wiki.com/wiki/Logrotate) configuration for *hazelcast-server*.
+  
+*hazelcast-server-service* adds
+
+* `/etc/hazelcast-server/hazelcast-server.xml`
+
+  Hazelcast's main XML configuration file, *not* including any map or queue a.s.f. definitions.
+  
+* `/etc/init.d/hazelcast-server`
+
+  *hazelcast-server's* service script for starting, stopping, restarting a.s.f.
+  
+Finally, *hazelcast-server-app* installs
+
+* `/var/lib/hazelcast-server/deploy/app/{app-maps.xml,app-queues.xml}`
+
+  Two sample files containing map and queue definitions which will be "deployed" upon server startup.
+  
+Caveat Emptor
+-------------
+
+While I have proven at least to my own satisfaction that the approach we chose basically works, some more or less serious shortcomings in *hazelcast-server's* current incarnation remain. Depending on context these may or may not be relevant in your specific circumstances.
+
+* Not a turnkey solution
+
+  It is unlikely that what you find here - with the possible exception of *hazelcast-server-base* - will fulfill your needs out of the box. You will probably need to adapt *hazelcast-server.xml* to your specific requirements and will therefore have to build your own *hazelcast-server-service* variant. Not a big deal, though. Same goes obviously for deploying your own applications' map a.s.f. definitions into *hazelcast-server*.
+  
+* No support for multiple Hazelcast instances
+
+  As of today we don't have a need for multiple Hazelcast instances per JVM. Always eager to avoid needless complexity I didn't bother to implement support for this feature. Adding it should be straightforward, though, the only challenge being how to have deployed map definitions reference the Hazelcast instance they want to live in.
+  
+* No support for Hazelcast's [Distributed Executor Service](http://www.hazelcast.com/docs/2.4/manual/multi_html/ch09.html)
+
+  This is a coooooool - sorry, the techy in me went overboard - feature, but again, we don't use it. Plus I'm not sure if I like the idea of *hazelcast-server* morphing into some kind of application container. The jury's still out on this. At any rate, I have one or two ideas how to implement this. Of course, you are always free and welcome to issue a pull request ;-)
+  
+* Modularized configuration somewhat hackish
+
+  There, I said it. My approach to supporting modularized configuration in Hazelcast is a hack. Take a look at [this line](https://github.com/obergner/hazelcast-server/blob/master/base/src/main/java/com/obergner/hzserver/pluggable/ComposableXmlConfigBuilder.java#L76) in `ComposableXmlConfigBuilder.java` and try to tell me that this abomination in the face of Knuth does not pain the god-fearing, self-respecting coder in you. And the only excuse I may call to my aid once disdain and contempt will rightfully be heaped upon me is that pathetic "But it works! And it get's the job done!". Now, how lame's that!? But still ... OK, OK, I'll shut up.
+  
+But if you can will yourself to turn a blind eye to my little Frankenstein's shortcomings I truly hope that it will serve you well. I don't expect world domination any time soon, or world peace for that matter, but maybe it will help someone out there.
+
+Contributing
+------------
+
+Fork it, clone it, take it to places where it's never been. Maybe issue a pull-request if you feel like it. Consider dropping me a note when you find *hazelcast-server* useful. File a bug report or a feature request. I won't promise anything, but I will surely look into it.
+
+License
+-------
