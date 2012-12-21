@@ -68,8 +68,8 @@ As a proof of concept I implemented a Hazelcast server that does its best to ful
 * exposed a few select MBean attributes via SNMP, using Torsten Curdt's excellent little [jmx2snmp](https://github.com/tcurdt/jmx2snmp) library (since operations is having a hard time integrating MBeans and [Icinga](https://www.icinga.org/)),
 * plugged all the pieces into each other using [Spring](http://www.springsource.org/), an IOC container you might have heard of already,
 * wrapped the result into an RPM package *hazelcast-server-base* using the rather useful [RPM Maven Plugin](http://mojo.codehaus.org/rpm-maven-plugin/), where that RPM includes neither configuration nor a service script (hint: Configurationless Application),
-* bundled a sample Hazelcast XML configuration file and a script for running *hazelcast-server* as a linux service - using *Tanuki Software's* as always flawless [Java Service Wrapper](http://wrapper.tanukisoftware.com/doc/german/download.jsp) - into another RPM, *hazelcast-server-service* that declares a dependency on *hazelcast-server-base*, and
-* bundled some sample map and queue defintions into yet another RPM, *hazelcast-server-app", to demonstrate how one would go about deploying application-specifif resources into a central Hazelcast server.
+* bundled a sample Hazelcast XML configuration file and a script for running *hazelcast-server* as a linux service - using *Tanuki Software's* as always flawless [Java Service Wrapper](http://wrapper.tanukisoftware.com/doc/german/download.jsp) - into another RPM, *hazelcast-server-service*, that declares a dependency on *hazelcast-server-base*, and
+* bundled some sample map and queue defintions into yet another RPM, *hazelcast-server-app*, to demonstrate how one would go about deploying application-specifif resources into a central Hazelcast server.
 
 RPM package organization
 ------------------------
