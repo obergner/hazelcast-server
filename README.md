@@ -49,7 +49,7 @@ Well, I don't know about you, but to me that's not exactly what I would call pro
 
   Yes, all our applications are supposed to be well-behaved linux services, supporting the usual
   
-      /etc/init.d/application (start|stop|restart|status|condrestart)
+      `/etc/init.d/application (start|stop|restart|status|condrestart)`
     
 * Supports "deploying" map etc. definitions per application
 
