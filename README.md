@@ -139,7 +139,7 @@ While I have proven at least to my own satisfaction that the approach we chose b
   
 * Modularized configuration somewhat hackish
 
-  There, I said it. My approach to supporting modularized configuration in Hazelcast is a hack. Take a look at [this line](https://github.com/obergner/hazelcast-server/blob/master/base/src/main/java/com/obergner/hzserver/pluggable/ComposableXmlConfigBuilder.java#L76) in `ComposableXmlConfigBuilder.java` and try to tell me that this abomination in the face of Knuth does not pain the god-fearing, self-respecting coder in you. And the only excuse I may call to my aid once disdain and contempt will rightfully be heaped upon me is that pathetic "But it works! And it get's the job done!". Now, how lame's that!? But still ... OK, OK, I'll shut up.
+  There, I said it. My approach to supporting modularized configuration in Hazelcast is a hack. Take a look at [this line](https://github.com/obergner/hazelcast-server/blob/master/base/src/main/java/com/obergner/hzserver/pluggable/ComposableXmlConfigBuilder.java#L76) in `ComposableXmlConfigBuilder.java` and try to tell me that this abomination in the face of Knuth does not pain the god-fearing, self-respecting coder in you. And the only excuse I may call to my aid once disdain and contempt will rightfully be heaped upon me is that pathetic "But it works! And it gets the job done!". Now, how lame's that!? But still ... OK, OK, I'll shut up.
   
 But if you can will yourself to turn a blind eye to my little Frankenstein's shortcomings I truly hope that it will serve you well. I don't expect world domination any time soon, or world peace for that matter, but maybe it will help someone out there.
 
