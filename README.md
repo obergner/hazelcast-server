@@ -55,7 +55,7 @@ Well, I don't know about you, but to me that's not exactly what I would call pro
 
   We want a server each client may easily deploy map/queue definitions into. In other words, we want a *modularized* server configuration, *not* one big kitchen-sink configuration file.
   
-* Is packaged as an RPM
+* Packaged as an RPM
 
   *Continuous Delivery* is a hot topic for us, and one building block in our solution is to have as many of our applications as feasible packaged and deployed as RPMs. Use your OS' native package management, the days of the venerable *.tar.gz* are over.
   
