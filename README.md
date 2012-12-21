@@ -43,7 +43,7 @@ That's all nice and dandy, you may say, but why troubling yourself with implemen
 
     java -cp hazelcast-2.0.3.jar com.hazelcast.examples.StartServer
  
-Well, I don't know about you, but to me that's not exactly what I would call production-ready. In our situation we have to satisfy some requirements not covered by that innocent solution above:
+Well, I don't know about you, but to me that's not exactly what I would call production-ready. In our situation we have to satisfy some requirements not covered by that innocent approach above:
 
 * Runs as a linux service
 
